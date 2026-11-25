@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>System Modelling Study Studio</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f3f1ec;--sf:#fff;--ink:#231f1c;--mu:#6a625a;--ac:#2a6a9a;--br:#6b4a35;--ln:#d8d2c8;--ok:#2e7d4f;--no:#b3402f;--tint:#e8eef3}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#1a1816;--sf:#25221f;--ink:#efeae3;--mu:#a89f94;--ac:#74b5e4;--br:#d6ad8e;--ln:#3a3631;--ok:#6cc690;--no:#ea8573;--tint:#222d36}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#1a1816;--sf:#25221f;--ink:#efeae3;--mu:#a89f94;--ac:#74b5e4;--br:#d6ad8e;--ln:#3a3631;--ok:#6cc690;--no:#ea8573;--tint:#222d36}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Avenir Next","Segoe UI",system-ui,sans-serif}
+header{padding:20px 16px 8px;max-width:980px;margin:auto}
+h1{font:600 26px/1.2 "Iowan Old Style",Georgia,serif;margin:0;color:var(--br)}
+header p{margin:4px 0 0;color:var(--mu);font-size:14px}
+.tabs{display:flex;gap:6px;padding:10px 16px;max-width:980px;margin:auto;overflow-x:auto}
+.tabs button{flex:none;border:1px solid var(--ln);background:var(--sf);color:var(--ink);padding:8px 16px;border-radius:20px;font:inherit;font-size:15px;cursor:pointer}
+.tabs button.on{background:var(--br);color:var(--bg);border-color:var(--br)}
+main{max-width:980px;margin:auto;padding:8px 16px 40px}
+section{display:none}section.on{display:block}
+.grid{display:grid;grid-template-columns:230px 1fr;gap:20px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.mods{display:flex;flex-direction:column;gap:4px}
+@media(max-width:700px){.mods{flex-direction:row;overflow-x:auto;padding-bottom:6px}.mods button{flex:none;white-space:nowrap}}
+.mod{text-align:left;border:0;border-left:3px solid var(--ln);background:none;color:var(--ink);padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
+.mod.on{border-color:var(--br);background:var(--sf);font-weight:600}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:18px}
+h2{font:600 22px/1.25 "Iowan Old Style",Georgia,serif;margin:0 0 10px}
+.card li{margin:0 0 10px}
+.btn{border:1px solid var(--ac);background:var(--ac);color:var(--bg);padding:8px 16px;border-radius:8px;font:inherit;font-size:15px;cursor:pointer}
+.btn.g{background:none;color:var(--ac)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:10px 14px;border:1px solid var(--ln);background:var(--bg);color:var(--ink);border-radius:8px;font:inherit;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:var(--tint)}.opt.no{border-color:var(--no)}
+.why{margin-top:10px;color:var(--mu)}
+.bar{height:10px;background:var(--ln);border-radius:5px;overflow:hidden;margin:4px 0 12px}
+.bar i{display:block;height:100%;background:var(--ok)}
+.mu{color:var(--mu);font-size:14px}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tools button,.tools input{border:1px solid var(--ln);background:var(--sf);color:var(--ink);padding:6px 10px;border-radius:8px;font:inherit;font-size:14px}
+.tools button.on{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+.cv{border:1px solid var(--ln);border-radius:10px;background:var(--sf);overflow:auto;height:min(60vh,520px)}
+#svg{width:100%;display:block;touch-action:none;background-image:radial-gradient(var(--ln) 1px,transparent 1px);background-size:20px 20px}
+.ed{stroke:var(--ink);stroke-width:1.6;fill:none}
+.nd{fill:var(--tint);stroke:var(--ink);stroke-width:1.6}
+.nd.s{stroke:var(--ac);stroke-width:3}
+svg text{fill:var(--ink);font:13px "Avenir Next","Segoe UI",system-ui,sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+textarea{width:100%;height:80px;background:var(--sf);color:var(--ink);border:1px solid var(--ln);border-radius:8px;font:12px monospace}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+</style></head><body>
+<header><h1>System Modelling Study Studio</h1><p>COMP 70035 Critical Systems and Applications · Lecture 1, built from your slides</p></header>
+<nav class="tabs" id="tabs"></nav>
+<main>
+<section id="v-learn"></section>
+<section id="v-quiz"></section>
+<section id="v-editor">
+<div class="tools" id="tl"></div>
+<div class="tools">
+<input id="lab" placeholder="Label for selected shape" aria-label="Label for selected shape" style="flex:1;min-width:160px">
+<input id="elab" placeholder="Label for next arrow (e.g. Yes)" aria-label="Arrow label" style="flex:1;min-width:140px">
+</div>
+<div class="tools">
+<button onclick="zoom(.8)">Zoom out</button><button onclick="zoom(1.25)">Zoom in</button>
+<button onclick="delSel()">Delete shape</button><button onclick="undoEdge()">Undo arrow</button>
+<button onclick="demo()">Load library flowchart</button><button onclick="clearAll()">Clear</button>
+<label class="mu" style="align-self:center">Trace over an image: <input type="file" accept="image/*" id="img"></label>
+<button onclick="E.bg=null;draw()">Remove image</button>
+<button onclick="exp()">Copy SVG</button>
+</div>
+<div class="cv"><svg id="svg" viewBox="0 0 900 560" preserveAspectRatio="xMinYMin meet"></svg></div>
+<p class="mu">Pick a shape, then tap the canvas to place it. Drag to move. Choose “Connect arrow”, then tap two shapes. Upload a diagram from your notes to trace over it, and use Note shapes to annotate.</p>
+<textarea id="out" placeholder="Exported SVG appears here" aria-label="Exported SVG"></textarea>
+</section>
+<section id="v-prog"></section>
+</main>
+<script>
+const M=[
+{t:"Basics of systems",p:["A system is a collection of interrelated parts working toward a goal.","Components: inputs → processes → outputs, with feedback returning to adjust the system.","Mobile banking example: inputs are login details and commands; processes are authentication and fund transfers; outputs are confirmations and updated balances; feedback is error messages and insufficient-balance warnings.","Characteristics: interdependence, hierarchy, boundary, purpose and feedback loops."],q:[
+["Which list gives the components of a system in the lecture?",["Inputs, processes, outputs, feedback","Users, servers, networks, backups","Plan, build, test, deploy"],0,"A system turns inputs into outputs through processes, and feedback loops back."],
+["In the banking example, an “insufficient balance” warning is…",["An input","A process","Feedback"],2,"Error messages, warnings and real-time balance updates are feedback."]]},
+{t:"Types of systems",p:["Open vs. closed: an open system exchanges information, energy or materials with its environment (a business adapting to the market). A closed system does not, and is mostly theoretical.","Physical vs. abstract: physical systems are tangible (a car engine, a computer). Abstract systems exist as ideas or models (a software algorithm, a workflow).","Socio-technical systems (STS) combine people and technology to reach a common goal, such as a hospital using electronic health records or an online learning platform.","STS characteristics: people and technology are interdependent, a change in one affects the other, and feedback and adaptation drive improvement."],q:[
+["A business adapting to market changes is a(n)…",["Open system","Closed system","Abstract system only"],0,"It exchanges information and resources with its environment."],
+["A software algorithm or workflow process is a(n)…",["Physical system","Abstract system","Closed engine"],1,"Abstract systems are conceptual and exist in ideas or models."]]},
+{t:"University as a system",p:["Subsystems: Admissions, Finance, LMS, Library, Examination and Assessment, Human Resources, IT Support.","Dependencies: Admissions → Finance (billing depends on accurate records); LMS → IT Support; Library → LMS (digital resources); Examination → LMS and Finance.","Failures: an admissions delay blocks enrolment, a finance failure causes wrong billing, LMS downtime interrupts teaching, a library outage limits research.","Interdependency failure: if IT fails, the LMS, library and finance can all be affected."],q:[
+["Which subsystem does the LMS depend on to run smoothly?",["Library","Human Resources","IT Support"],2,"Online learning platforms rely on IT infrastructure."],
+["What happens if IT Support fails?",["Only IT is affected","Several dependent subsystems are affected","Nothing, subsystems are independent"],1,"Interdependence means one failure can cascade."]]},
+{t:"Critical systems",p:["Critical systems are computer systems whose failure could cause loss of life, major financial loss or damage to the environment.","Safety-critical (aircraft control), mission-critical (banking) and business-critical (e-commerce platforms).","They need very high reliability, availability and fault tolerance, plus protection from unauthorised access and errors.","They undergo rigorous testing, verification and validation against strict performance and safety requirements."],q:[
+["Aircraft control is an example of a…",["Safety-critical system","Business-critical system","Closed system"],0,"Failure could cost lives."],
+["In the lecture, a banking system is…",["Safety-critical","Mission-critical","Abstract"],1,"Banking systems were given as mission-critical examples."]]},
+{t:"Why model? Levels of modelling",p:["System modelling is an abstract representation of a system to understand and improve it.","Why: it simplifies complexity, enforces structured thinking, reduces errors by catching mistakes early, and promotes collaboration through a common visual language.","Conceptual level: the big picture of what the system is and does, with no technical detail (the library use case diagram).","Logical level: detailed structure and behaviour without technology constraints (the ER diagram).","Physical level: the real implementation in hardware and software (SQL CREATE TABLE statements)."],q:[
+["Which is a benefit of modelling?",["Mistakes are found and corrected early","Testing is no longer needed","The system becomes physical"],0,"Modelling reduces errors by exposing problems early."],
+["An ER diagram of the library belongs to which level?",["Conceptual","Logical","Physical"],1,"It shows detailed structure without hardware or software choices."],
+["CREATE TABLE Books (...) is which level?",["Conceptual","Logical","Physical"],2,"It is an actual implementation in a database."]]},
+{t:"Flowcharts",p:["Flowcharts show steps and decisions in a process.","Oval: start/end. Arrow: connector showing relationships. Parallelogram: input/output. Rectangle: process. Diamond: decision.","Examples in the lecture: lending a book from a library (login, staff check, search book, available?, borrow) and a doctor appointment reservation."],q:[
+["Which symbol represents a decision?",["Diamond","Rectangle","Parallelogram"],0,"A diamond splits the flow into Yes/No paths."],
+["A parallelogram represents…",["Start or end","Input or output","A process"],1,"Rectangles are processes and ovals are start/end."]]},
+{t:"UML, DFD and other techniques",p:["Common techniques: flowcharts, UML, BPMN, data flow diagrams, SysML and system dynamics.","Use case diagram: actors, use cases, association, generalisation, «include» and «extend» relationships (Borrower, Librarian, Maintenance).","Class diagram: classes with attributes and operations, associations and inheritance (Book → Journals, Study books, Magazines).","Activity diagram: initial node, actions, decisions and a final node (check availability, validate member, issue book).","Data flow diagram: shows how data moves between entities, processes and stores (User, Library, Book Lending)."],q:[
+["In a use case diagram, «include» shows…",["A link between an actor and a use case","One use case including another","Inheritance between classes"],1,"It is a relationship between use cases."],
+["Which diagram shows classes, attributes, operations and inheritance?",["Class diagram","Activity diagram","Use case diagram"],0,"Book, Librarian and MemberRecord were class examples."],
+["Which diagram shows decisions with an initial and a final node for lending a book?",["Class diagram","DFD","Activity diagram"],2,"Activity diagrams model the flow of actions."]]},
+{t:"Business processes and BPMN",p:["A business process is a set of structured activities that produce a service or product, or achieve a business goal, involving employees, departments, suppliers and customers.","Business process modelling is the systematic modelling, analysis and improvement of processes. It clarifies work, identifies waste and supports automation and ERP.","BPMN essentials: flow objects (events, activities, gateways), connecting objects (sequence, message, association), swimlanes (pools and lanes) and artifacts (data objects, annotations, groups).","Example: the customer order process, from purchase order received to order fulfilled."],q:[
+["Which are BPMN flow objects?",["Events, activities and gateways","Pools and lanes","Data objects and groups"],0,"Pools and lanes are swimlanes; data objects are artifacts."],
+["A pool is divided into…",["Gateways","Artifacts","Lanes"],2,"Lanes sit within a pool."]]},
+{t:"Business process reengineering",p:["BPR is the radical redesign of processes for dramatic improvement.","Drivers: competition, technology, cost and customer expectations.","Modelling helps visualise inefficiencies, simulate changes and align with strategy.","As Is is the current process; To Be is the suggested process. In the cosmetics manufacturing example, the As Is flow sends samples to a lab and product to quarantine.","Collaborative tools from the lecture: Lucidchart for flowcharts and UML, Bizagi for BPMN."],q:[
+["Business process reengineering is…",["Small incremental tweaks","Radical redesign for dramatic improvement","A coding standard"],1,"BPR aims for dramatic, not marginal, gains."],
+["The “As Is” process is…",["The suggested future process","The current process","A simulation result"],1,"As Is is current; To Be is suggested."]]}];
+const ld=()=>{try{return JSON.parse(localStorage.getItem("smstudio")||"{}")}catch(e){return{}}};
+let P=Object.assign({done:{},best:{},miss:{}},ld());
+const sv=()=>{try{localStorage.setItem("smstudio",JSON.stringify(P))}catch(e){}};
+const $=i=>document.getElementById(i),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let S={m:0,qz:null};
+const T=[["learn","Learn"],["quiz","Practice"],["editor","Diagram editor"],["prog","Progress"]];
+function tab(k){T.forEach(([a])=>{$("v-"+a).classList.toggle("on",a==k)});$("tabs").innerHTML=T.map(([a,l])=>`<button class="${a==k?"on":""}" onclick="tab('${a}')">${l}</button>`).join("");if(k=="learn")rl();if(k=="quiz")rq();if(k=="prog")rp()}
+function rl(){const m=M[S.m];$("v-learn").innerHTML=`<div class="grid"><nav class="mods">${M.map((x,i)=>`<button class="mod ${i==S.m?"on":""}" onclick="S.m=${i};rl()">${P.done[i]?"✓ ":""}${esc(x.t)}</button>`).join("")}</nav><article class="card"><h2>${esc(m.t)}</h2><ul>${m.p.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="row"><button class="btn" onclick="P.done[${S.m}]=1;sv();rl()">${P.done[S.m]?"Completed":"Mark as done"}</button><button class="btn g" onclick="sq(${S.m})">Quiz this topic</button></div></article></div>`}
+function sq(i){S.qz={key:i,items:M[i].q.map(q=>({q,m:i})),i:0,s:0,a:null};tab("quiz")}
+function fin(){const all=[];M.forEach((m,i)=>m.q.forEach(q=>all.push({q,m:i})));all.sort(()=>Math.random()-.5);S.qz={key:"final",items:all.slice(0,12),i:0,s:0,a:null};rq()}
+function rq(){const z=S.qz,el=$("v-quiz");if(!z){el.innerHTML=`<div class="card"><h2>Practice</h2><p>Pick a topic quiz, or take the final assessment (12 mixed questions).</p><div class="row">${M.map((m,i)=>`<button class="btn g" onclick="sq(${i})">${esc(m.t)}${P.best[i]!=null?" · "+P.best[i]+"%":""}</button>`).join("")}</div><div class="row"><button class="btn" onclick="fin()">Final assessment${P.best.final!=null?" · best "+P.best.final+"%":""}</button></div></div>`;return}
+if(z.i>=z.items.length){const pc=Math.round(100*z.s/z.items.length);P.best[z.key]=Math.max(P.best[z.key]||0,pc);sv();el.innerHTML=`<div class="card"><h2>${pc}% (${z.s} of ${z.items.length})</h2><p>${pc>=70?"Solid. Move on, or try the final assessment.":"Review the lesson, then try again."}</p><div class="row"><button class="btn" onclick="S.qz=null;rq()">Back to practice</button></div></div>`;return}
+const it=z.items[z.i],[q,o,a,w]=it.q;el.innerHTML=`<div class="card"><p class="mu">Question ${z.i+1} of ${z.items.length}</p><h2>${esc(q)}</h2>${o.map((x,i)=>`<button class="opt ${z.a!=null?(i==a?"ok":i==z.a?"no":""):""}" onclick="ans(${i})">${esc(x)}</button>`).join("")}${z.a!=null?`<p class="why">${z.a==a?"Correct. ":"Not quite. "}${esc(w)}</p><div class="row"><button class="btn" onclick="S.qz.i++;S.qz.a=null;rq()">Next</button></div>`:""}</div>`}
+function ans(i){const z=S.qz;if(z.a!=null)return;const it=z.items[z.i];z.a=i;if(i==it.q[2])z.s++;else{P.miss[it.m]=(P.miss[it.m]||0)+1;sv()}rq()}
+function rp(){const d=Object.keys(P.done).length,b=Object.keys(P.best).filter(k=>k!="final").map(k=>P.best[k]),avg=b.length?Math.round(b.reduce((x,y)=>x+y,0)/b.length):0,pct=Math.round(100*(d/M.length+b.length/M.length)/2);const weak=M.map((m,i)=>({m,i,n:P.miss[i]||0})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+$("v-prog").innerHTML=`<div class="card"><h2>Overall ${pct}%</h2><div class="bar"><i style="width:${pct}%"></i></div><p>Lessons completed: ${d} of ${M.length}. Topic quizzes taken: ${b.length} of ${M.length}, average best ${avg}%.${P.best.final!=null?" Final assessment best: "+P.best.final+"%.":""}</p><h2 style="margin-top:18px">Weak areas</h2>${weak.length?weak.map(x=>`<p style="margin:6px 0">${esc(x.m.t)} <span class="mu">· ${x.n} missed</span> <button class="btn g" style="padding:2px 10px;font-size:13px" onclick="S.m=${x.i};tab('learn')">Review</button></p>`).join(""):`<p class="mu">None yet. Take some quizzes and missed topics will show here.</p>`}<div class="row"><button class="btn g" onclick="if(confirm('Reset all progress?')){P={done:{},best:{},miss:{}};sv();rp()}">Reset progress</button></div></div>`}
+/* Diagram editor */
+const SH={term:["Start / End",110,46],proc:["Process",120,56],dec:["Decision",130,76],io:["Input / Output",130,50],uc:["Use case",130,56],act:["Actor",60,86],note:["Note",150,50]};
+const E={n:[],e:[],sel:null,tool:"select",from:null,z:1,id:1,bg:null};
+$("tl").innerHTML=Object.keys(SH).map(k=>`<button data-t="${k}" onclick="tool('${k}')">${SH[k][0]}</button>`).join("")+`<button data-t="conn" onclick="tool('conn')">Connect arrow</button><button data-t="select" class="on" onclick="tool('select')">Select / move</button>`;
+function tool(t){E.tool=t;E.from=null;document.querySelectorAll("#tl button").forEach(b=>b.classList.toggle("on",b.dataset.t==t))}
+const nd=id=>E.n.find(n=>n.id==id);
+function clip(a,b){const dx=b.x-a.x,dy=b.y-a.y,w=SH[a.t][1]/2,h=SH[a.t][2]/2,t=Math.min(dx?w/Math.abs(dx):1e9,dy?h/Math.abs(dy):1e9,1);return[a.x+dx*t,a.y+dy*t]}
+function shape(n){const[,w,h]=SH[n.t],c=`nd${E.sel==n.id?" s":""}`,x=n.x,y=n.y;
+if(n.t=="term")return`<rect class="${c}" x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}"/>`;
+if(n.t=="proc")return`<rect class="${c}" x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="4"/>`;
+if(n.t=="dec")return`<polygon class="${c}" points="${x},${y-h/2} ${x+w/2},${y} ${x},${y+h/2} ${x-w/2},${y}"/>`;
+if(n.t=="io")return`<polygon class="${c}" points="${x-w/2+16},${y-h/2} ${x+w/2},${y-h/2} ${x+w/2-16},${y+h/2} ${x-w/2},${y+h/2}"/>`;
+if(n.t=="uc")return`<ellipse class="${c}" cx="${x}" cy="${y}" rx="${w/2}" ry="${h/2}"/>`;
+if(n.t=="act")return`<circle class="${c}" cx="${x}" cy="${y-28}" r="10"/><path class="${c}" d="M${x} ${y-18}V${y+6}M${x-16} ${y-8}H${x+16}M${x} ${y+6}L${x-14} ${y+26}M${x} ${y+6}L${x+14} ${y+26}"/>`;
+return`<rect class="${c}" x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" stroke-dasharray="5 4"/>`}
+function draw(){let s=`<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--ink)"/></marker></defs>`;
+if(E.bg)s+=`<image href="${E.bg}" x="0" y="0" width="900" height="560" preserveAspectRatio="xMidYMid meet" opacity=".55"/>`;
+E.e.forEach(e=>{const a=nd(e.a),b=nd(e.b);if(!a||!b)return;const p=clip(a,b),q=clip(b,a);s+=`<line class="ed" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" marker-end="url(#ar)"/>${e.l?`<text x="${(p[0]+q[0])/2+10}" y="${(p[1]+q[1])/2-8}">${esc(e.l)}</text>`:""}`});
+E.n.forEach(n=>{s+=`<g data-id="${n.id}" style="cursor:move">${shape(n)}<text x="${n.x}" y="${n.y+(n.t=="act"?42:0)}">${esc(n.txt)}</text></g>`});
+$("svg").innerHTML=s}
+function pt(ev){const sv=$("svg"),p=sv.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const r=p.matrixTransform(sv.getScreenCTM().inverse());return[r.x,r.y]}
+let drag=null;
+$("svg").addEventListener("pointerdown",ev=>{const g=ev.target.closest("[data-id]"),[x,y]=pt(ev);
+if(E.tool=="conn"){if(g){const id=+g.dataset.id;if(E.from==null){E.from=id;E.sel=id}else{if(id!=E.from)E.e.push({a:E.from,b:id,l:$("elab").value});E.from=null;E.sel=null}draw()}return}
+if(g){const n=nd(+g.dataset.id);E.sel=n.id;drag=[n,x-n.x,y-n.y];$("lab").value=n.txt;$("svg").setPointerCapture(ev.pointerId);draw();return}
+if(SH[E.tool]){const n={id:E.id++,t:E.tool,x:Math.round(x),y:Math.round(y),txt:SH[E.tool][0]};E.n.push(n);E.sel=n.id;$("lab").value=n.txt;tool("select");draw();return}
+E.sel=null;draw()});
+$("svg").addEventListener("pointermove",ev=>{if(!drag)return;const[x,y]=pt(ev);drag[0].x=Math.round(x-drag[1]);drag[0].y=Math.round(y-drag[2]);draw()});
+$("svg").addEventListener("pointerup",()=>{drag=null});
+$("lab").addEventListener("input",ev=>{const n=nd(E.sel);if(n){n.txt=ev.target.value;draw()}});
+function zoom(f){E.z=Math.min(3,Math.max(.5,E.z*f));$("svg").style.width=(100*E.z)+"%"}
+function delSel(){if(E.sel==null)return;E.n=E.n.filter(n=>n.id!=E.sel);E.e=E.e.filter(e=>e.a!=E.sel&&e.b!=E.sel);E.sel=null;draw()}
+function undoEdge(){E.e.pop();draw()}
+function clearAll(){E.n=[];E.e=[];E.sel=null;draw()}
+function demo(){clearAll();const L=[["term",450,40,"Start"],["proc",450,120,"Login"],["dec",450,215,"Staff?"],["proc",250,320,"Manage books"],["proc",650,320,"Search book"],["dec",650,420,"Available?"],["proc",650,510,"Borrow book"],["term",250,510,"Exit"]];
+L.forEach((a,i)=>E.n.push({id:i+1,t:a[0],x:a[1],y:a[2],txt:a[3]}));E.id=L.length+1;
+[[1,2],[2,3],[3,4,"Yes"],[3,5,"No"],[5,6],[6,7,"Yes"],[4,8],[7,8]].forEach(a=>E.e.push({a:a[0],b:a[1],l:a[2]||""}));draw()}
+$("img").addEventListener("change",ev=>{const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{E.bg=r.result;draw()};r.readAsDataURL(f)});
+function exp(){const keep=E.sel;E.sel=null;draw();const c=$("svg").cloneNode(true);c.setAttribute("xmlns","http://www.w3.org/2000/svg");c.removeAttribute("style");c.removeAttribute("id");const css=`.nd{fill:#e8eef3;stroke:#231f1c;stroke-width:1.6}.ed{stroke:#231f1c;stroke-width:1.6;fill:none}text{font:13px sans-serif;text-anchor:middle;dominant-baseline:middle;fill:#231f1c}`;c.insertAdjacentHTML("afterbegin",`<style>${css}</style>`);const t=c.outerHTML.replace(/var\(--ink\)/g,"#231f1c");$("out").value=t;E.sel=keep;draw();try{navigator.clipboard.writeText(t)}catch(e){}$("out").select()}
+tab("learn");draw();
+</script></body></html>
